@@ -5,6 +5,8 @@ import time
 import argparse
 from datetime import datetime
 from threading import Thread
+from threading import Lock
+
 
 def servidor(ip,porta):
 	FLAG = True
@@ -23,12 +25,12 @@ def servidor(ip,porta):
 	
 	def client(conn, addr):
 		log_file = 'tcp_{}_{}.log'.format(addr[1],times)
-		# fp = open(log_file, 'w')
+		fp = open(log_file, 'w')
 		n_pac = 0
 		diff = 0
 		init = time.time()
 		while FLAG:
-			data = conn.recv(BUFFER_SIZE)	
+			data = conn.recv(BUFFER_SIZE)
 			n_pac += len(data)
 
 			if not data: 
@@ -42,23 +44,23 @@ def servidor(ip,porta):
 				band = ((n_pac * 8) // int(diff))
 				# print('%0.2f \t' % band)
 				if band >= 2 ** 30:
-					# fp.write("%0.2f Gbps \n" % (10 * band / 10 ** 9))
-					print("%0.2f Gbps \t port %d \n" % (band / 10 ** 9, addr[1]))
+					fp.write("%0.2f Gbps \n" % (band / 10 ** 9))
+					# print("%0.2f Gbps \t port %d \n" % (band / 10 ** 9, addr[1]))
 				elif band <  2 ** 30 and band >= 2 ** 20:
-					# fp.write("%0.2f Mbps \n" % (10 * band / 10 ** 7))
+					fp.write("%0.2f Mbps \n" % (band / 10 ** 6))
 					print("%0.2f Mbps \t port %d \n" % (band / 10 ** 6, addr[1]))
 				elif band < 2 ** 20 and band >= 2 ** 10:
-					# fp.write("%0.2f Kbps \n" % (10 * band / 1000))
-					print("%0.2f Kbps \t port %d \n" % (band / 1000, addr[1]))
+					fp.write("%0.2f Kbps \n" % (band / 1000))
+					# print("%0.2f Kbps \t port %d \n" % (band / 1000, addr[1]))
 				else:
-					# fp.write("%0.2f bps \n" % (band)) 				
-					print("%0.2f bps \t port %d \n" % (band, addr[1]))
+					fp.write("%0.2f bps \n" % (band)) 				
+					# print("%0.2f bps \t port %d \n" % (band, addr[1]))
 				n_pac = 0
 				# diff = 0
-				init = time.time()
 				# time.sleep(1)
+				init = time.time()
 				
-		# fp.close() 
+		fp.close() 
 		conn.close()
 			
 	try:
@@ -66,7 +68,7 @@ def servidor(ip,porta):
 			conn, addr = s.accept()
 			print('Endereco de conexao: {}'.format(addr))
 			Thread(target=client, args=(conn,addr)).start()
-			time.sleep(10)
+			time.sleep(1)
 	except:
 		FLAG = False
 		s.close()
