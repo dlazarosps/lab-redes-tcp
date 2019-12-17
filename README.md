@@ -18,5 +18,5 @@ O programa deve ser apresentado ao professor de forma individual em algum moment
     $ python clientTCP.py -i <SERVER_IP> -p <SERVER_PORT>
 ```
 
-### Logs 
-    [Graficos](https://docs.google.com/spreadsheets/d/1yqjDEE5en7OZDVAVHguUbPZDFmvAuPLI2VvmBAOYHxg/edit?usp=sharing "Google Sheets")
+### Logs
+[Graficos](https://docs.google.com/spreadsheets/d/1yqjDEE5en7OZDVAVHguUbPZDFmvAuPLI2VvmBAOYHxg/edit?usp=sharing "Google Sheets")
